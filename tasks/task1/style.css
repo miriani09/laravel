@@ -1,0 +1,17 @@
+.header-title{
+    text-align: center;
+}
+.header-frame{
+    width: 100%;
+    height: auto;
+    border-bottom:solid 1px silver;
+}
+
+.input{
+    width: 20% !important;
+}
+
+th{
+    width: 1% !important;
+    text-align: center;
+}
