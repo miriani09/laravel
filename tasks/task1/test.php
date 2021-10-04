@@ -1,67 +1,67 @@
 <?php
-    require_once "conn.php";
+require_once "conn.php";
 
-    class Timer{
-        public string $start;
-        public string $stop;
-        public string $full_time;
-        public string $score;
+class Timer{
+    public string $start;
+    public string $stop;
+    public string $full_time;
+    public string $score;
 
-        function __construct($start,$stop,$full_time,$score){
-            $this->start = $start;
-            $this->stop = $stop;
-            $this->full_time = $full_time;
-            $this->score = $score;
-        }
+    function __construct($start,$stop,$full_time,$score){
+        $this->start = $start;
+        $this->stop = $stop;
+        $this->full_time = $full_time;
+        $this->score = $score;
     }
-    // ობიექტის შექმნა
-    $timer = new Timer(0,0,0,0);
+}
+// ობიექტის შექმნა
+$timer = new Timer(0,0,0,0);
 
-    //ტესტის დაწყების დრო, იწერება timer ცხრილში "start" სტრიქონში
-    if (isset($_GET['start'])){
-            $start_date = strtotime(date('Y-m-d H:i:s'));
-            $sql_insert = "INSERT INTO timer(start)
+//ტესტის დაწყების დრო, იწერება timer ცხრილში "start" სტრიქონში
+if (isset($_GET['start'])){
+    $start_date = strtotime(date('Y-m-d H:i:s'));
+    $sql_insert = "INSERT INTO timer(start)
                         VALUES ('$start_date')";
-            $conn->exec($sql_insert);
-        }
+    $conn->exec($sql_insert);
+}
 
-    if (isset($_GET['submit'])){
-        //მოგვაქ დაწყების დროის სტრიქონი ბაზიდან
-        $select_start = $conn->prepare("SELECT start FROM timer ORDER BY start DESC LIMIT 1");
-        $select_start->execute();
-        $result_start = $select_start->fetchColumn();
+if (isset($_GET['submit'])){
+    //მოგვაქ დაწყების დროის სტრიქონი ბაზიდან
+    $select_start = $conn->prepare("SELECT start FROM timer ORDER BY start DESC LIMIT 1");
+    $select_start->execute();
+    $result_start = $select_start->fetchColumn();
 
-        //Timer კლასის ობიექტს ვანიჭებთ წამოღებულ დაწყების დროს.
-        $timer->start=$result_start;
+    //Timer კლასის ობიექტს ვანიჭებთ წამოღებულ დაწყების დროს.
+    $timer->start=$result_start;
 
-        //გადაგვყავს თარიღი ჩვენს ფორმატზე
-        $result_start1 = date('Y-m-d H:i:s',$result_start);
-        $print_start_test = $result_start1." - test started";
+    //გადაგვყავს თარიღი ჩვენს ფორმატზე
+    $result_start1 = date('Y-m-d H:i:s',$result_start);
+    $print_start_test = $result_start1." - test started";
 
-        //ვქმნით ტესტის შეწყვეტის თარიღს.
-        $stop_date = strtotime(date('Y-m-d H:i:s'));
-        //ტესტის შეწყვეტის დრო, იწერება timer ცხრილის stop სტრიქონში
-        $sql_insert = "INSERT INTO timer(stop)
+    //ვქმნით ტესტის შეწყვეტის თარიღს.
+    $stop_date = strtotime(date('Y-m-d H:i:s'));
+    //ტესტის შეწყვეტის დრო, იწერება timer ცხრილის stop სტრიქონში
+    $sql_insert = "INSERT INTO timer(stop)
                         VALUES ('$stop_date')";
-        $conn->exec($sql_insert);
+    $conn->exec($sql_insert);
 
-        //კლასის ობიექტს ვანიჭებთ დამთავრების თარიღს
-        $timer->stop=$stop_date;
-        $print_stop_test = date('Y-m-d H:i:s', $stop_date)." - test stopped";
+    //კლასის ობიექტს ვანიჭებთ დამთავრების თარიღს
+    $timer->stop=$stop_date;
+    $print_stop_test = date('Y-m-d H:i:s', $stop_date)." - test stopped";
 
-        //ბაზაში იწერება ტესტის სრული დრო.
-        $sql_insert_full_time = "INSERT INTO timer(full_time)
+    //ბაზაში იწერება ტესტის სრული დრო.
+    $sql_insert_full_time = "INSERT INTO timer(full_time)
                         VALUES ('$timer->full_time')";
-        $conn->exec($sql_insert_full_time);
+    $conn->exec($sql_insert_full_time);
 
-        //კლასის ობიექტზე მინიჭებული თვისებებით ხდება გამოანგარიშება თუ რამდენი დრო გავიდა დაწყებიდან დასაასრულამდე.
-        $full_time = ($timer->stop - $timer->start) - 60*60;
-        $timer->full_time=$full_time;
-        //კლასის ობიექტს ვანიჭებთ ტესტის სრულ დროს
-        $print_full_time =  date('H:i:s', $full_time)." - full time";
-    }
+    //კლასის ობიექტზე მინიჭებული თვისებებით ხდება გამოანგარიშება თუ რამდენი დრო გავიდა დაწყებიდან დასაასრულამდე.
+    $full_time = ($timer->stop - $timer->start) - 60*60;
+    $timer->full_time=$full_time;
+    //კლასის ობიექტს ვანიჭებთ ტესტის სრულ დროს
+    $print_full_time =  date('H:i:s', $full_time)." - full time";
+}
 
- ?>
+?>
 <!doctype html>
 <html lang="en">
 <head>
@@ -74,59 +74,61 @@
 <body>
     <?php
         include "header.php";
-     ?>
-    <form method="get">
-        <a href="test.php?start=" class="btn btn-success" type="button">Start test</a>
-    </form>
-    <?php
-        if (isset($_GET['start'])){
-            $words = $conn->prepare("SELECT * FROM words ORDER BY RAND() LIMIT 4 ");
-            $words->execute();
-            $result = $words->fetchAll((PDO::FETCH_ASSOC));
-
-            foreach ($result as $item){
-     ?>
+    ?>
         <form method="get">
-            <div class="form-check form-check-inline">
-                <h3><?php echo $item["english"]." :"?></h3>
-                <?php
-                        $words = $conn->prepare("SELECT * FROM words WHERE english != '{$item["english"]}' ORDER BY RAND() LIMIT 3");
-                        $words->execute();
-                        $result = $words->fetchAll((PDO::FETCH_ASSOC));
-                        array_push($result, $item);
-                        shuffle($result);
-                        foreach ($result as $item2){
-                 ?>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="radio" value="<?php echo $item2['georgian'] ?>"><label class="form-check-label" for="inlineRadio1"><?php echo $item2["georgian"] ?></label>
-                </div>
-                    <?php
-                        }
-                    ?>
-            </div>
-
-            <button class="btn btn-success" name="submit">Submit test</button>
+            <button class="btn btn-success" name="start">Start test</button>
         </form>
-        <?php
+    <?php
+    if (isset($_GET['start'])){
+        $words = $conn->prepare("SELECT * FROM words ORDER BY RAND() LIMIT 4 ");
+        $words->execute();
+        $result = $words->fetchAll((PDO::FETCH_ASSOC));
+
+        foreach ($result as $i => $item){
+            ?>
+            <form method="get">
+            <br>
+                <div class="form-check form-check-inline">
+                    <h3><?php echo $item["english"]." :"?></h3>
+                    <?php
+                    $words = $conn->prepare("SELECT * FROM words WHERE english != '{$item["english"]}' ORDER BY RAND() LIMIT 3");
+                    $words->execute();
+                    $result = $words->fetchAll((PDO::FETCH_ASSOC));
+                    array_push($result, $item);
+                    shuffle($result);
+
+                    foreach ($result as $item2){
+                        ?>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="radio<?php echo $i ?>" value="<?php echo $item2['georgian'] ?>"><label class="form-check-label" for="inlineRadio1"><?php echo $item2["georgian"] ?></label>
+                        </div>
+                        <?php
+                    }
+                    ?>
+                </div>
+            <?php
                 }
-         ?>
-    <?php
-        }
-     ?>
-    <?php
-        if (isset($_GET['submit'])){
-            echo $print_start_test;
-            echo "<br>";
-            echo $print_stop_test;
-            echo "<br>";
-            echo $print_full_time;
-            echo "<br>";
-            if(!empty($_GET['radio'])) {
-                echo '  ' . $_GET['radio'];
-            } else {
-                echo 'Please select the value.';
+            ?>
+                <br>
+                <button class="btn btn-success" name="submit">Submit test</button>
+            </form>
+        <?php
             }
+        ?>
+<?php
+    if (isset($_GET['submit']) && !empty($_GET['radio0']) && !empty($_GET['radio1']) && !empty($_GET['radio2']) && !empty($_GET['radio3'])) {
+        echo $print_start_test;
+        echo "<br>";
+        echo $print_stop_test;
+        echo "<br>";
+        echo $print_full_time;
+        echo "<br>";
+            echo '  ' . $_GET['radio0'];
+            echo '  ' . $_GET['radio1'];
+            echo '  ' . $_GET['radio2'];
+            echo '  ' . $_GET['radio3'];
         }
-     ?>
+
+?>
 </body>
 </html>
