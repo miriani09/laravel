@@ -79,6 +79,7 @@ if (isset($_GET['submit'])){
             <button class="btn btn-success" name="start">Start test</button>
         </form>
     <?php
+    $count = 0;
     if (isset($_GET['start'])){
         $words = $conn->prepare("SELECT * FROM words ORDER BY RAND() LIMIT 4 ");
         $words->execute();
@@ -100,34 +101,38 @@ if (isset($_GET['submit'])){
                     foreach ($result as $item2){
                         ?>
                         <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="radio<?php echo $i ?>" value="<?php echo $item2['georgian'] ?>"><label class="form-check-label" for="inlineRadio1"><?php echo $item2["georgian"] ?></label>
+                            <input class="form-check-input" type="radio" name="answer<?php echo $i ?>" value="<?php echo $item2['georgian'] ?>"><label class="form-check-label" for="inlineRadio1"><?php echo $item2["georgian"] ?></label>
                         </div>
                         <?php
                     }
+
                     ?>
                 </div>
             <?php
-                }
-            ?>
+        }
+        ?>
                 <br>
                 <button class="btn btn-success" name="submit">Submit test</button>
             </form>
         <?php
-            }
-        ?>
+    }
+    ?>
 <?php
-    if (isset($_GET['submit']) && !empty($_GET['radio0']) && !empty($_GET['radio1']) && !empty($_GET['radio2']) && !empty($_GET['radio3'])) {
+    if (isset($_GET['submit']) && !empty($_GET['answer0']) && !empty($_GET['answer1']) && !empty($_GET['answer2']) && !empty($_GET['answer3'])) {
         echo $print_start_test;
         echo "<br>";
         echo $print_stop_test;
         echo "<br>";
         echo $print_full_time;
         echo "<br>";
-            echo '  ' . $_GET['radio0'];
-            echo '  ' . $_GET['radio1'];
-            echo '  ' . $_GET['radio2'];
-            echo '  ' . $_GET['radio3'];
-        }
+            echo '  ' . $_GET['answer0'];
+            echo '  ' . $_GET['answer1'];
+            echo '  ' . $_GET['answer2'];
+            echo '  ' . $_GET['answer3'];
+        echo "<br>";
+            echo $count;
+
+    }
 
 ?>
 </body>
