@@ -26,6 +26,8 @@ if (isset($_GET['start'])){
 }
 
 if (isset($_GET['submit'])){
+
+
     //მოგვაქ დაწყების დროის სტრიქონი ბაზიდან
     $select_start = $conn->prepare("SELECT start FROM timer ORDER BY start DESC LIMIT 1");
     $select_start->execute();
@@ -79,9 +81,10 @@ if (isset($_GET['submit'])){
             <button class="btn btn-success" name="start">Start test</button>
         </form>
     <?php
+
     $count = 0;
     if (isset($_GET['start'])){
-        $words = $conn->prepare("SELECT * FROM words ORDER BY RAND() LIMIT 4 ");
+        $words = $conn->prepare("SELECT * FROM words ORDER BY RAND() LIMIT 4");
         $words->execute();
         $result = $words->fetchAll((PDO::FETCH_ASSOC));
 
@@ -90,7 +93,7 @@ if (isset($_GET['submit'])){
             <form method="get">
             <br>
                 <div class="form-check form-check-inline">
-                    <h3><?php echo $item["english"]." :"?></h3>
+                    <h3><?php echo $item["english"]?><input type="hidden" name="question<?php echo $i ?>" value="<?php echo $item["id"]?>"></h3>
                     <?php
                     $words = $conn->prepare("SELECT * FROM words WHERE english != '{$item["english"]}' ORDER BY RAND() LIMIT 3");
                     $words->execute();
@@ -101,15 +104,14 @@ if (isset($_GET['submit'])){
                     foreach ($result as $item2){
                         ?>
                         <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="answer<?php echo $i ?>" value="<?php echo $item2['georgian'] ?>"><label class="form-check-label" for="inlineRadio1"><?php echo $item2["georgian"] ?></label>
+                            <input class="form-check-input" type="radio" name="answer<?php echo $i ?>" value="<?php echo $item2['georgian'] ?>" required><label class="form-check-label" for="inlineRadio1"><?php echo $item2["georgian"] ?></label>
                         </div>
                         <?php
                     }
-
                     ?>
                 </div>
             <?php
-        }
+            }
         ?>
                 <br>
                 <button class="btn btn-success" name="submit">Submit test</button>
@@ -118,20 +120,31 @@ if (isset($_GET['submit'])){
     }
     ?>
 <?php
-    if (isset($_GET['submit']) && !empty($_GET['answer0']) && !empty($_GET['answer1']) && !empty($_GET['answer2']) && !empty($_GET['answer3'])) {
+    if (isset($_GET['submit'])) {
+        $count_answer = 0;
+
+        for ($i = 0;$i <= 3;$i++){
+            $question = $_GET['question'.$i];
+
+            $query0 = $conn->prepare("SELECT georgian FROM words WHERE id = '$question'");
+            $query0->execute();
+            $correct_answer = $query0->fetchColumn();
+
+            if ($correct_answer == $_GET['answer'.$i]){
+                $count_answer+=1;
+            }
+        }
+
+
         echo $print_start_test;
         echo "<br>";
         echo $print_stop_test;
         echo "<br>";
         echo $print_full_time;
         echo "<br>";
-            echo '  ' . $_GET['answer0'];
-            echo '  ' . $_GET['answer1'];
-            echo '  ' . $_GET['answer2'];
-            echo '  ' . $_GET['answer3'];
-        echo "<br>";
-            echo $count;
 
+        echo "<br>";
+        echo "Correct Answers - ". $count_answer;
     }
 
 ?>
