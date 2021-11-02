@@ -6,4 +6,4 @@ $delete = $conn->prepare('DELETE FROM words WHERE id = :id');
 $delete->bindValue(':id', $_GET['id']);
 $delete->execute();
 
-header("location:view_words.php");
+header("location:view_tests.php");

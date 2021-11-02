@@ -13,11 +13,12 @@ foreach ($result as $items){
 }
 
 if (isset($_POST['submit'])){
-    $edit = $conn->prepare("UPDATE words SET english=:english,georgian=:georgian");
+    $edit = $conn->prepare("UPDATE words SET english=:english,georgian=:georgian WHERE id = :id");
+    $edit->bindValue(':english', $_POST['id']);
     $edit->bindValue(':english', $_POST['eng']);
     $edit->bindValue(':georgian',$_POST['geo']);
     $edit->execute();
-    header('location:view_words.php');
+    header('location:view_tests.php');
 }
 
 ?>
