@@ -104,7 +104,8 @@ if (isset($_GET['submit'])){
                     foreach ($result as $item2){
                         ?>
                         <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="answer<?php echo $i ?>" value="<?php echo $item2['georgian'] ?>" required><label class="form-check-label" for="inlineRadio1"><?php echo $item2["georgian"] ?></label>
+                            <input class="form-check-input" type="radio" name="answer<?php echo $i ?>" value="<?php echo $item2['georgian'] ?>" required>
+                            <label class="form-check-label" for="inlineRadio1"><?php echo $item2["georgian"] ?></label>
                         </div>
                         <?php
                     }
