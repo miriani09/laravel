@@ -15,7 +15,7 @@
     <div class="collapse navbar-collapse" id="navbarNav" style="margin-left: 1%">
         <ul class="navbar-nav">
             <li class="nav-item">
-                <a class="nav-link " href=""><h5>მთავარი</h5></a>
+                <a class="nav-link " href="{{ "index" }}"><h5>მთავარი</h5></a>
             </li>
             <li class="nav-item">
                 <a class="nav-link " href="{{ "category" }}"><h5>კატეგორიები</h5></a>

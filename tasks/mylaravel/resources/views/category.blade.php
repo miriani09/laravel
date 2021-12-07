@@ -33,7 +33,7 @@
 </nav>
 <div class="card-group">
     <div class="card">
-        <a href="" class="category">
+        <a href="?cat1" class="category">
             <img src="{{asset('image/flw.png')}}" class="card-img-top" alt="...">
             <div class="card-body">
                 <h5 class="card-title">თაიგულები</h5>
@@ -41,7 +41,7 @@
         </a>
     </div>
     <div class="card">
-        <a href="?cat1" class="category">
+        <a href="?cat2" class="category">
             <img src="{{asset('image/flw.png')}}" class="card-img-top" alt="...">
             <div class="card-body">
                 <h5 class="card-title">გვირგვინები</h5>
